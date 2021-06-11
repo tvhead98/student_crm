@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'system',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -82,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'crm', #数据库名
         'USER': 'root', #数据库用户名，本机一般为root
-        'PASSWORD': '', #数据库密码
+        'PASSWORD': 'ab226690', #数据库密码
         'HOST': '127.0.0.1', #数据库连接ip，一般不需要改动
         'PORT': '3306', #端口，一般不需要改动
         'ATOMATIC_REQUESTS': True #全局生效自动提交事务
