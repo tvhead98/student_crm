@@ -7,8 +7,15 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('unique/', views.unique, name='unique'),
     path('register/', views.register, name='register'),
-    path('layout/', views.layout, name='layout'),
-    path('login_check/', views.login_check, name='login_check')
+    path('index/', views.index, name='index'),
+    path('login_check/', views.login_check, name='login_check'),
+    path('logout/', views.logout, name='logout'),
+    path('course/', views.course, name='course'),
+
+    path('get_name/', views.get_name, name='get_name'),
+
+
+    # path('session_test/', views.session_test, name='session_test')
 ]
 
 

@@ -13,4 +13,4 @@ class User(models.Model):
     email = models.CharField(max_length=255, db_column='email')
 
     class Meta(object):
-        db_table = 'user'
+        db_table = 'users'

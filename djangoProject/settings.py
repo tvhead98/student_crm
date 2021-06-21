@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# session
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Application definition
 
@@ -83,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'crm', #数据库名
         'USER': 'root', #数据库用户名，本机一般为root
-        'PASSWORD': 'ab226690', #数据库密码
+        'PASSWORD': 'mybs970215.', #数据库密码
         'HOST': '127.0.0.1', #数据库连接ip，一般不需要改动
         'PORT': '3306', #端口，一般不需要改动
         'ATOMATIC_REQUESTS': True #全局生效自动提交事务
