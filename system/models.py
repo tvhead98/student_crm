@@ -14,3 +14,4 @@ class User(models.Model):
 
     class Meta(object):
         db_table = 'users'
+
