@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form action="">
+    <input type="text" name="course_keyword" placeholder="课程编号">
+    <input type="submit" value="查询">
+</form>
+
+<table border="3">
+    <thead>
+        <tr>
+            <th>学生姓名</th>
+            <th>学号</th>
+            <th>课程编号</th>
+            <th>课程名称</th>
+            <th>课程成绩</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in studentcourse %}
+        <tr>
+            <td>{{i.user_name}}</td>
+            <td>{{i.student_id}}</td>
+            <td>{{i.course_id}}</td>
+            <td>{{i.course_name}}</td>
+            <td>{{i.course_score}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>
