@@ -47,13 +47,13 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
 <th>专业</th>
 <td><div class="txtbox floatL"><p id="major" type="text" size="20"></div></td>
 </tr>
-<th>性别</th>
-<td><div class="txtbox floatL"><p id="sex" type="text" size="20"></div></td>
-</tr>
-<tr>
-<th>培养层次</th>
-<td><div class="txtbox floatL"><p id="degree" type="text" size="20" placeholder="本科/硕士/博士/博士后"></div></td>
-</tr>
+{#<th>性别</th>#}
+{#<td><div class="txtbox floatL"><p id="sex" type="text" size="20"></div></td>#}
+{#</tr>#}
+{#<tr>#}
+{#<th>培养层次</th>#}
+{#<td><div class="txtbox floatL"><p id="degree" type="text" size="20" placeholder="本科/硕士/博士/博士后"></div></td>#}
+{#</tr>#}
 <tr>
 <th>国籍或地区</th>
 <td><div class="txtbox floatL"><input id="nationality" type="text" size="20"></div></td>
@@ -121,7 +121,7 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
                 },
         'success': function (result) {
             data = JSON.parse(result)
-                $('#user_name').html(data['user_name']);
+                $('#user_name').html(data['name']);
                 $('#major').html(data['major']);
                 //后面还有性别的不确定
                 //$('#further_degree').html(data['further_degree']);

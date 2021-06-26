@@ -3,8 +3,7 @@ import json
 from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
-from system.models import User, StudentCourse, StudentBasic, CourseInfo, CourseProgram, CourseScore, CourseTest, \
-    Applicant_test, Applicant, GraduateEdu, GraduateJob, GraduateReturn
+from system.models import User, StudentCourse, StudentBasic, CourseInfo, CourseProgram, CourseScore, CourseTest, Applicant_test, Applicant, GraduateEdu, GraduateJob, GraduateReturn
 from django.contrib.auth import authenticate
 
 # Create your views here.
@@ -22,6 +21,9 @@ def left(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     return render(request, 'left.html')
+
+def forbidden(request):
+    return render(request, 'forbidden.html')
 #session
 # def session_test(request):
 #     request.session['h1'] = 'hello'
@@ -159,6 +161,10 @@ def list(request):
     })
 
 def get_course_info(request):
+    user_identity= User.objects.get(user_name=request.session.get('username')).identity
+    print(user_identity)
+    if user_identity != 'student':
+        return render(request,'forbidden.html')
     course_keyword=request.GET.get('course_keyword')
     if course_keyword == None or course_keyword == '':
         courseInfo = CourseInfo.objects.filter(user_name=request.session.get('username'))
@@ -171,11 +177,15 @@ def get_course_info(request):
     })
 
 def get_course_program(request):
+    user_identity= User.objects.get(user_name=request.session.get('username')).identity
+    print(user_identity)
+    if user_identity != 'student':
+        return render(request,'forbidden.html')
     course_keyword=request.GET.get('course_keyword')
     if course_keyword == None or course_keyword == '':
         courseprogram = CourseProgram.objects.filter(user_name=request.session.get('username'))
-        print('111')
-        print(courseprogram)
+        # print('111')
+        # print(courseprogram)
     else:
         courseprogram = CourseProgram.objects.filter(course_id=course_keyword,user_name=request.session.get('username'))
 
@@ -185,6 +195,10 @@ def get_course_program(request):
     })
 
 def get_course_score(request):
+    user_identity= User.objects.get(user_name=request.session.get('username')).identity
+    print(user_identity)
+    if user_identity != 'student':
+        return render(request,'forbidden.html')
     course_keyword=request.GET.get('course_keyword')
     if course_keyword == None or course_keyword == '':
         coursescore = CourseScore.objects.filter(user_name=request.session.get('username'))
@@ -197,52 +211,73 @@ def get_course_score(request):
     })
 
 def get_course_test(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    print(user_identity)
+    if user_identity != 'student':
+        return render(request, 'forbidden.html')
     course_keyword=request.GET.get('course_keyword')
     if course_keyword == None or course_keyword == '':
-        coursetest = CourseTest.objects.filter(user_name=request.session.get('username'))
+            coursetest = CourseTest.objects.filter(user_name=request.session.get('username'))
     else:
-        coursetest =  CourseTest.objects.filter(course_id=course_keyword,user_name=request.session.get('username'))
+         coursetest =  CourseTest.objects.filter(course_id=course_keyword,user_name=request.session.get('username'))
 
     return render(request, 'study_course_test.html', {
         'coursetest':coursetest,
-        'course_keyword':course_keyword
-    })
+        'course_keyword':course_keyword})
 
 
 def get_student_basic(request):
+    # user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    # # print(user_identity)
+    # if user_identity != 'student':
+    #     return render(request, 'forbidden.html')
     username = request.session.get('username')
     student = StudentBasic.objects.get(user_name=username)
     print(student.electricity_fee)
     print(student.money)
+    print(student)
     print(student.fee)
     print(student.dorm)
     print(student.major)
-    print(student.student_name)
+    print(student.name)
     return HttpResponse(json.dumps({
             'electricity': student.electricity_fee,
             'money': student.money,
             'fee': student.fee,
             'dorm': student.dorm,
             'student_id': student.student_id,
-            'student_name': student.student_name,
+            'student_name': student.name,
             'tel': student.tel,
             'major': student.major,
-            'class_id': student.class_id,
-            'entrance_time': student.entrance_time,
+            'class_id': student.class_field,
+            'entrance_time': student.entrance_time.strftime("%Y-%m-%d"),
             'type': student.type,
             'home': student.home,
     }))
 
 #跳转到life界面
 def life(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    # print(user_identity)
+    if user_identity != 'student':
+        return render(request, 'forbidden.html')
     if not request.session.get('is_login', None):
         return redirect('/login/')
     return render(request, 'life.html')
 
 def p1(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    # print(user_identity)
+    if user_identity != 'student':
+        return render(request, 'forbidden.html')
     if not request.session.get('is_login', None):
         return redirect('/login/')
     return render(request, 'p1.html')
+
+def head_mine(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    return render(request, 'head_mine.html')
 
 # def get_class(request):
 #     studentcourse = StudentCourse.objects.filter(user_name=request.session.get('username'))
@@ -263,16 +298,36 @@ def graduate_left(request):
     return render(request, 'graduate_left.html')
 
 def graduate_edu(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    # print(user_identity)
+    if user_identity != 'alumni':
+        return render(request, 'forbidden.html')
     return render(request, 'graduate_edu.html')
 def graduate_edu_info(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    # print(user_identity)
+    if user_identity != 'alumni':
+        return render(request, 'forbidden.html')
     return render(request, 'graduate_edu_info.html')
 
 def graduate_job(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    # print(user_identity)
+    if user_identity != 'alumni':
+        return render(request, 'forbidden.html')
     return render(request, 'graduate_job.html')
 def graduate_job_info(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    # print(user_identity)
+    if user_identity != 'alumni':
+        return render(request, 'forbidden.html')
     return render(request, 'graduate_job_info.html')
 
 def graduate_return(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    # print(user_identity)
+    if user_identity != 'alumni':
+        return render(request, 'forbidden.html')
     return render(request, 'graduate_return.html')
 
 def save_graduate_edu(request):
@@ -374,6 +429,7 @@ def save_graduate_return(request):
                                 graduate_return_campus = graduate_return_campus,
                                 graduate_return_gate = graduate_return_gate)
         further.save()
+
     else:
         further = GraduateReturn.objects.get(user_name=username)
         further.nationality=nationality
@@ -388,15 +444,17 @@ def save_graduate_return(request):
         further.graduate_return_campus = graduate_return_campus
         further.graduate_return_gate = graduate_return_gate
         further.save()
-    return
+    return JsonResponse({'code': 200, 'msg': '保存成功！'})
 
 #这个要用学生基本信息还需要继续修改
 def get_graduate_return(request):
     username = request.session.get('username', None)
     further = StudentBasic.objects.get(user_name=username)
+    # name=StudentBasic.name
     return HttpResponse(json.dumps({
         'user_name':username,
         'major':further.major,
+        'name':further.name,
         #后面的性别不知道哪一个是
      }))
 
@@ -436,5 +494,6 @@ def save_applicant_data(request):
 # 考试信息表
 def applicant_test(request):
     test_number = Applicant.objects.get(user_name=request.session.get('username')).test_number
+    print(test_number)
     project1 = Applicant_test.objects.filter(test_number=test_number)
     return render(request, 'applicant_test.html', {'project1': project1})

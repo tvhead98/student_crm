@@ -12,6 +12,7 @@ class User(models.Model):
     age = models.IntegerField(blank=True, null=True)
     gender = models.CharField(max_length=1, blank=True, null=True)
     email = models.CharField(max_length=255, blank=True, null=True)
+    true_name = models.CharField(max_length=255, db_collation='utf8mb4_cs_0900_ai_ci', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -158,7 +159,7 @@ class GraduateJob(models.Model):
 
 
 class GraduateReturn(models.Model):
-    user_name = models.CharField(max_length=255, blank=True, null=True)
+    user_name = models.CharField(primary_key=True,max_length=255, blank=True)
     nationality = models.CharField(max_length=255, blank=True, null=True)
     id_type = models.CharField(max_length=255, blank=True, null=True)
     student_id = models.CharField(max_length=255, blank=True, null=True)

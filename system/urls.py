@@ -11,6 +11,9 @@ urlpatterns = [
     path('login_check/', views.login_check, name='login_check'),
     path('logout/', views.logout, name='logout'),
     path('course/', views.course, name='course'),
+    path('head_mine/', views.head_mine, name='head_mine'),
+    path('forbidden/', views.forbidden, name='forbidden'),
+
     path('left/', views.left, name='left'),
 
     path('get_name/', views.get_name, name='get_name'),
@@ -25,7 +28,7 @@ urlpatterns = [
     path('study_course_test/', views.get_course_test, name='study_course_test'),
 
     path('life/', views.life, name='life'),
-    path('get_student_basic', views.get_student_basic, name='get_student_basic'),
+    path('get_student_basic/', views.get_student_basic, name='get_student_basic'),
     path('p1/', views.p1, name='p1'),
 
     path('graduate_edu/', views.graduate_edu, name='graduate_edu'),
@@ -40,6 +43,11 @@ urlpatterns = [
     path('get_graduate_job/', views.get_graduate_job, name='get_graduate_job'),
     path('get_graduate_return/', views.get_graduate_return, name='get_graduate_return'),
     path('get_graduate_return/', views.get_graduate_return, name='get_graduate_return'),
+
+    path('applicant_test/', views.applicant_test, name='applicant_test'),
+    path('save_applicant_data/', views.save_applicant_data, name='save_applicant_data'),
+    path('change_info/', views.change_info, name='change_info'),
+
     # path('graduate_left/', views.graduate_left, name='graduate_left'),
 
 
