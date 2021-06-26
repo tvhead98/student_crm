@@ -1,8 +1,9 @@
+import json
+
 from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
-from django.views.decorators.http import require_POST,require_GET
-from system.models import User
-import json
+from django.views.decorators.http import require_POST
+from system.models import User, StudentCourse, StudentBasic,CourseInfo,CourseProgram,CourseScore,CourseTest
 from django.contrib.auth import authenticate
 
 # Create your views here.
@@ -15,11 +16,6 @@ def index(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
     return render(request, 'index.html')
-
-def course(request):
-    if not request.session.get('is_login', None):
-        return redirect('/login/')
-    return render(request, 'main.html')
 
 #session
 # def session_test(request):
@@ -92,8 +88,11 @@ def logout(request):
         request.session.flush()
     return rep
 
+def course(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    return render(request, 'main.html')
 
-@require_POST
 def get_name(request):
     user = User.objects.get(user_name=request.session.get('username'))
     print(user.password)
@@ -101,3 +100,110 @@ def get_name(request):
         'password':user.password,
         'email':user.email,
     }))
+
+def get_major(request):
+    student = StudentBasic.objects.get(user_name=request.session.get('username'))
+    # print(student.major)
+    return HttpResponse(json.dumps({
+        'major':student.major,
+        'class':student.class_field,
+    }))
+
+def get_rownum(request):
+    course_keyword = request.GET.get('course_keyword')
+    if course_keyword == None or course_keyword =='':
+        print("这是get_rownum1拿到的keyword值:")
+        print(course_keyword)
+        studentcourse = StudentCourse.objects.filter(user_name=request.session.get('username'))
+        numRows = StudentCourse.objects.filter(user_name=request.session.get('username')).count()
+        print(numRows)
+        rownum = str(numRows)+'为什么呢'
+        print('1.一共是' + rownum + '条记录的字符串')
+        print(studentcourse)
+    else:
+        print("这是get_rownum2拿到的keyword值:")
+        print(course_keyword)
+        studentcourse = StudentCourse.objects.filter(course_id=course_keyword,user_name=request.session.get('username'))
+        numRows = StudentCourse.objects.filter(course_id=course_keyword,user_name=request.session.get('username')).count()
+        print(numRows)
+
+        rownum = str(numRows)
+        print('2.一共是' + rownum + '条记录的字符串')
+        print(studentcourse)
+    return HttpResponse(json.dumps({'rownum': rownum}))
+
+
+def list(request):
+    course_keyword=request.GET.get('course_keyword')
+    if course_keyword == None or course_keyword == '':
+        studentcourse = StudentCourse.objects.filter(user_name=request.session.get('username'))
+    else:
+        studentcourse = StudentCourse.objects.filter(course_id=course_keyword,user_name=request.session.get('username'))
+
+    return render(request, 'study_Studentcourse.html', {
+        'studentcourse':studentcourse,
+        'course_keyword':course_keyword
+    })
+
+def get_course_info(request):
+    course_keyword=request.GET.get('course_keyword')
+    if course_keyword == None or course_keyword == '':
+        courseInfo = CourseInfo.objects.filter(user_name=request.session.get('username'))
+    else:
+        courseInfo = CourseInfo.objects.filter(course_id=course_keyword,user_name=request.session.get('username'))
+
+    return render(request, 'study_course_info.html', {
+        'courseInfo':courseInfo,
+        'course_keyword':course_keyword
+    })
+
+def get_course_program(request):
+    course_keyword=request.GET.get('course_keyword')
+    if course_keyword == None or course_keyword == '':
+        courseprogram = CourseProgram.objects.filter(user_name=request.session.get('username'))
+        print('111')
+        print(courseprogram)
+    else:
+        courseprogram = CourseProgram.objects.filter(course_id=course_keyword,user_name=request.session.get('username'))
+
+    return render(request, 'study_course_program.html', {
+        'courseprogram':courseprogram,
+        'course_keyword':course_keyword
+    })
+
+def get_course_score(request):
+    course_keyword=request.GET.get('course_keyword')
+    if course_keyword == None or course_keyword == '':
+        coursescore = CourseScore.objects.filter(user_name=request.session.get('username'))
+    else:
+        coursescore =  CourseScore.objects.filter(course_id=course_keyword,user_name=request.session.get('username'))
+
+    return render(request, 'study_course_score.html', {
+        'coursescore':coursescore,
+        'course_keyword':course_keyword
+    })
+
+def get_course_test(request):
+    course_keyword=request.GET.get('course_keyword')
+    if course_keyword == None or course_keyword == '':
+        coursetest = CourseTest.objects.filter(user_name=request.session.get('username'))
+    else:
+        coursetest =  CourseTest.objects.filter(course_id=course_keyword,user_name=request.session.get('username'))
+
+    return render(request, 'study_course_test.html', {
+        'coursetest':coursetest,
+        'course_keyword':course_keyword
+    })
+# def get_class(request):
+#     studentcourse = StudentCourse.objects.filter(user_name=request.session.get('username'))
+#
+#     print("222")
+#     return render(request, 'main.html', {'studentcourse':studentcourse})
+
+# def get_course_name(request):
+#     user = User.objects.get(user_name=request.session.get('username'))
+#     print(user.password)
+#     return HttpResponse(json.dumps({
+#         'password':user.password,
+#         'email':user.email,
+#     }))
