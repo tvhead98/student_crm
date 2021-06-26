@@ -82,6 +82,10 @@
     <th > 专业及班级：</th>
     <td id="major" > </td>
     <td id="class">  </td>
+    <th > 姓名</th>
+    <td id="name">  </td>
+    <th > 学号</th>
+    <td id="student_id">  </td>
 
 </tr>
 </table>
@@ -189,6 +193,23 @@ $("#username")
             alert('这是你本学期的培养方案');
                 $('#major').html(data['major']);
                 $('#class').html(data['class']);
+
+                },
+        'error': function (result) {
+            console.log(result);
+        }
+    })
+     $.ajax({
+        'type': 'POST',
+        'url': '{% url 'system:get_realname' %}',
+        'data': {
+            'csrfmiddlewaretoken': $.cookie('csrftoken'),
+                },
+        'success': function (result) {
+            data = JSON.parse(result)
+            {#alert('这是你本学期的课程安排');#}
+                $('#name').html(data['realname']);
+                $('#student_id').html(data['student_id']);
 
                 },
         'error': function (result) {

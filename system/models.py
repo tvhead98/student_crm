@@ -35,6 +35,7 @@ class StudentBasic(models.Model):
     tel = models.CharField(max_length=255, blank=True, null=True)
     work_place = models.CharField(max_length=255, blank=True, null=True)
     home = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255, db_collation='utf8mb4_cs_0900_ai_ci')
 
     class Meta:
         managed = False
@@ -129,3 +130,76 @@ class CourseTest(models.Model):
     class Meta:
         managed = False
         db_table = 'course_test'
+
+class GraduateEdu(models.Model):
+    user_name = models.CharField(primary_key=True, max_length=255)
+    further_school = models.CharField(max_length=255, blank=True, null=True)
+    further_major = models.CharField(max_length=255, blank=True, null=True)
+    further_degree = models.CharField(max_length=255, blank=True, null=True)
+    further_full_part_time = models.CharField(max_length=1, db_collation='utf8_bin', blank=True, null=True)
+    further_start_time = models.DateField( blank=True, null=True)
+    further_graduate_time = models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'graduate_edu'
+
+
+class GraduateJob(models.Model):
+    user_name = models.CharField(primary_key=True, max_length=255)
+    graduate_employer = models.CharField(max_length=255, blank=True, null=True)
+    graduate_job_position = models.CharField(max_length=255, blank=True, null=True)
+    graduate_job_start_time = models.DateField(blank=True, null=True)
+    graduate_job_end_time = models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'graduate_job'
+
+
+class GraduateReturn(models.Model):
+    user_name = models.CharField(max_length=255, blank=True, null=True)
+    nationality = models.CharField(max_length=255, blank=True, null=True)
+    id_type = models.CharField(max_length=255, blank=True, null=True)
+    student_id = models.CharField(max_length=255, blank=True, null=True)
+    tel = models.CharField(max_length=255, blank=True, null=True)
+    graduate_depart_nation = models.CharField(max_length=255, blank=True, null=True)
+    graduate_depart_province = models.CharField(max_length=255, blank=True, null=True)
+    graduate_depart_city = models.CharField(max_length=255, blank=True, null=True)
+    graduate_return_date = models.DateField(blank=True, null=True)
+    graduate_return_time = models.TimeField(blank=True, null=True)
+    graduate_return_campus = models.CharField(max_length=255, blank=True, null=True)
+    graduate_return_gate = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'graduate_return'
+
+
+class Applicant(models.Model):
+    user_name = models.CharField(primary_key=True, max_length=30, db_column='user_name')
+    region = models.CharField(max_length=255, blank=True, null=True, db_column='region')
+    graduation_school = models.CharField(max_length=255, blank=True, null=True, db_column='graduation_school')
+    major = models.CharField(max_length=255, blank=True, null=True, db_column='major')
+    transfer = models.CharField(max_length=255, blank=True, null=True, db_column='transfer')
+    remarks = models.TextField(db_column='remarks')
+    test_number = models.CharField(max_length=255, blank=True, null=True, db_column='test_number')
+
+    class Meta:
+        managed = False
+        db_table = 'applicant'
+
+
+class Applicant_test(models.Model):
+    test_number = models.CharField(max_length=255)
+    time = models.CharField(max_length=255)
+    course = models.CharField(max_length=255)
+    place = models.CharField(max_length=255)
+    status = models.CharField(max_length=255)
+    score = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'applicant_test'
+
+

@@ -3,7 +3,8 @@ import json
 from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
-from system.models import User, StudentCourse, StudentBasic,CourseInfo,CourseProgram,CourseScore,CourseTest
+from system.models import User, StudentCourse, StudentBasic, CourseInfo, CourseProgram, CourseScore, CourseTest, \
+    Applicant_test, Applicant, GraduateEdu, GraduateJob, GraduateReturn
 from django.contrib.auth import authenticate
 
 # Create your views here.
@@ -17,6 +18,10 @@ def index(request):
         return redirect('/login/')
     return render(request, 'index.html')
 
+def left(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    return render(request, 'left.html')
 #session
 # def session_test(request):
 #     request.session['h1'] = 'hello'
@@ -108,6 +113,14 @@ def get_major(request):
         'major':student.major,
         'class':student.class_field,
     }))
+def get_realname(request):
+    student = StudentBasic.objects.get(user_name=request.session.get('username'))
+    print(student.name)
+    return HttpResponse(json.dumps({
+        'realname':student.name,
+        'student_id':student.student_id,
+
+    }))
 
 def get_rownum(request):
     course_keyword = request.GET.get('course_keyword')
@@ -194,6 +207,43 @@ def get_course_test(request):
         'coursetest':coursetest,
         'course_keyword':course_keyword
     })
+
+
+def get_student_basic(request):
+    username = request.session.get('username')
+    student = StudentBasic.objects.get(user_name=username)
+    print(student.electricity_fee)
+    print(student.money)
+    print(student.fee)
+    print(student.dorm)
+    print(student.major)
+    print(student.student_name)
+    return HttpResponse(json.dumps({
+            'electricity': student.electricity_fee,
+            'money': student.money,
+            'fee': student.fee,
+            'dorm': student.dorm,
+            'student_id': student.student_id,
+            'student_name': student.student_name,
+            'tel': student.tel,
+            'major': student.major,
+            'class_id': student.class_id,
+            'entrance_time': student.entrance_time,
+            'type': student.type,
+            'home': student.home,
+    }))
+
+#跳转到life界面
+def life(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    return render(request, 'life.html')
+
+def p1(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    return render(request, 'p1.html')
+
 # def get_class(request):
 #     studentcourse = StudentCourse.objects.filter(user_name=request.session.get('username'))
 #
@@ -207,3 +257,184 @@ def get_course_test(request):
 #         'password':user.password,
 #         'email':user.email,
 #     }))
+
+
+def graduate_left(request):
+    return render(request, 'graduate_left.html')
+
+def graduate_edu(request):
+    return render(request, 'graduate_edu.html')
+def graduate_edu_info(request):
+    return render(request, 'graduate_edu_info.html')
+
+def graduate_job(request):
+    return render(request, 'graduate_job.html')
+def graduate_job_info(request):
+    return render(request, 'graduate_job_info.html')
+
+def graduate_return(request):
+    return render(request, 'graduate_return.html')
+
+def save_graduate_edu(request):
+    further_school = request.POST.get('further_school')
+    further_major = request.POST.get('further_major')
+    further_degree = request.POST.get('further_degree')
+    further_full_part_time = request.POST.get('further_full_part_time')
+    further_start_time = request.POST.get('further_start_time')
+    further_graduate_time = request.POST.get('further_graduate_time')
+    username = request.session.get('username', None)
+    #存入数据库
+    c = GraduateEdu.objects.filter(user_name=username).count()
+    if c==0 :
+        further= GraduateEdu(user_name=username,further_school=further_school,further_major=further_major,further_degree=further_degree,further_start_time=further_start_time,further_graduate_time=further_graduate_time,further_full_part_time=further_full_part_time)
+        further.save()
+    else:
+        further = GraduateEdu.objects.get(user_name=username)
+        further.further_school=further_school
+        further.further_major=further_major
+        further.further_degree=further_degree
+        further.further_full_part_time=further_full_part_time
+        further.further_start_time=further_start_time
+        further.further_graduate_time=further_graduate_time
+        further.save()
+    return
+
+def get_graduate_edu(request):
+    username = request.session.get('username', None)
+    further = GraduateEdu.objects.get(user_name=username)
+    return HttpResponse(json.dumps({
+        'further_school':further.further_school,
+        'further_major':further.further_major,
+        'further_degree':further.further_degree,
+        'further_full_part_time': further.further_full_part_time,
+        'further_start_time': further.further_start_time.strftime("%Y-%m-%d"),
+        'further_graduate_time': further.further_graduate_time.strftime("%Y-%m-%d"),
+     }))
+
+def save_graduate_job(request):
+    graduate_employer = request.POST.get('graduate_employer')
+    graduate_job_position = request.POST.get('graduate_job_position')
+    graduate_job_start_time = request.POST.get('graduate_job_start_time')
+    graduate_job_end_time = request.POST.get('graduate_job_end_time')
+    username = request.session.get('username', None)
+    #存入数据库
+    c = GraduateJob.objects.filter(user_name=username).count()
+    if c==0 :
+        further= GraduateJob(user_name=username,
+                             graduate_employer=graduate_employer,
+                             graduate_job_position=graduate_job_position,
+                             graduate_job_start_time=graduate_job_start_time,
+                             graduate_job_end_time=graduate_job_end_time)
+        further.save()
+    else:
+        further = GraduateJob.objects.get(user_name=username)
+        further.graduate_employer=graduate_employer
+        further.graduate_job_position=graduate_job_position
+        further.graduate_job_start_time=graduate_job_start_time
+        further.graduate_job_end_time=graduate_job_end_time
+        further.save()
+    return
+
+def get_graduate_job(request):
+    username = request.session.get('username', None)
+    further = GraduateJob.objects.get(user_name=username)
+    return HttpResponse(json.dumps({
+        'graduate_employer':further.graduate_employer,
+        'graduate_job_position':further.graduate_job_position,
+        'graduate_job_start_time':further.graduate_job_start_time.strftime("%Y-%m-%d"),
+        'graduate_job_end_time': further.graduate_job_end_time.strftime("%Y-%m-%d"),
+     }))
+
+def save_graduate_return(request):
+    nationality = request.POST.get('nationality')
+    id_type = request.POST.get('id_type')
+    student_id = request.POST.get('student_id')
+    tel = request.POST.get('tel')
+    graduate_depart_nation = request.POST.get('graduate_depart_nation')
+    graduate_depart_province = request.POST.get('graduate_depart_province')
+    graduate_depart_city = request.POST.get('graduate_depart_city')
+    graduate_return_date = request.POST.get('graduate_return_date')
+    graduate_return_time = request.POST.get('graduate_return_time')
+    graduate_return_campus = request.POST.get('graduate_return_campus')
+    graduate_return_gate = request.POST.get('graduate_return_gate')
+    username = request.session.get('username', None)
+    #存入数据库
+    c = GraduateReturn.objects.filter(user_name=username).count()
+    if c==0 :
+        further= GraduateReturn(user_name=username,
+                                nationality=nationality,
+                                id_type=id_type,
+                                student_id = student_id,
+                                tel = tel,
+                                graduate_depart_nation = graduate_depart_nation,
+                                graduate_depart_province = graduate_depart_province,
+                                graduate_depart_city = graduate_depart_city,
+                                graduate_return_date = graduate_return_date,
+                                graduate_return_time = graduate_return_time,
+                                graduate_return_campus = graduate_return_campus,
+                                graduate_return_gate = graduate_return_gate)
+        further.save()
+    else:
+        further = GraduateReturn.objects.get(user_name=username)
+        further.nationality=nationality
+        further.id_type=id_type
+        further.student_id=student_id
+        further.tel=tel
+        further.graduate_depart_nation = graduate_depart_nation
+        further.graduate_depart_province = graduate_depart_province
+        further.graduate_depart_city = graduate_depart_city
+        further.graduate_return_date = graduate_return_date
+        further.graduate_return_time = graduate_return_time
+        further.graduate_return_campus = graduate_return_campus
+        further.graduate_return_gate = graduate_return_gate
+        further.save()
+    return
+
+#这个要用学生基本信息还需要继续修改
+def get_graduate_return(request):
+    username = request.session.get('username', None)
+    further = StudentBasic.objects.get(user_name=username)
+    return HttpResponse(json.dumps({
+        'user_name':username,
+        'major':further.major,
+        #后面的性别不知道哪一个是
+     }))
+
+
+def change_info(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    username = request.POST.get('username')
+    applicant = Applicant.objects.filter(user_name=username)
+    user = User.objects.filter(user_name=username)
+    return render(request, 'change_info.html', {'applicant': applicant, 'user': user})
+
+
+def applicant_test(request):
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    return render(request, 'applicant_test.html')
+
+
+def save_applicant_data(request):
+    gender = int(request.POST.get('gender'))
+    # email = request.POST.get('email')
+    region = request.POST.get('region')
+    graduation_school = request.POST.get('graduation_school')
+    major = request.POST.get('major')
+    transfer = int(request.POST.get('transfer'))
+    username = request.session.get('username')
+    remarks = request.POST.get('remarks')
+    id_number = request.POST.get('id_number')
+    true_name = request.POST.get('true_name')
+    Applicant.objects.filter(user_name=username) \
+        .update(region=region, graduation_school=graduation_school, major=major, transfer=transfer, remarks=remarks)
+    User.objects.filter(user_name=username).update(gender=gender, id_number=id_number, true_name=true_name)
+    return JsonResponse({'code': 200, 'msg': '保存成功！'})
+
+
+# 考试信息表
+def applicant_test(request):
+    test_number = Applicant.objects.get(user_name=request.session.get('username')).test_number
+    project1 = Applicant_test.objects.filter(test_number=test_number)
+    return render(request, 'applicant_test.html', {'project1': project1})
