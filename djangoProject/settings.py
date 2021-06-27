@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-4f-$g(9p7p&t8f5-j6^-mp(ef1%5+ib+ei_d^9#8w988aim5ii
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # session
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -86,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'crm', #数据库名
         'USER': 'root', #数据库用户名，本机一般为root
-        'PASSWORD': 'mybs970215.', #数据库密码
+        'PASSWORD': 'ab226690', #数据库密码
         'HOST': '127.0.0.1', #数据库连接ip，一般不需要改动
         'PORT': '3306', #端口，一般不需要改动
         'ATOMATIC_REQUESTS': True #全局生效自动提交事务

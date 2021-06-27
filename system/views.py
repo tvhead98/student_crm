@@ -274,10 +274,20 @@ def p1(request):
         return redirect('/login/')
     return render(request, 'p1.html')
 
+def change_info_student(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    # print(user_identity)
+    if user_identity != 'student':
+        return render(request, 'forbidden.html')
+    if not request.session.get('is_login', None):
+        return redirect('/login/')
+    return render(request, 'change_info_student.html')
+
 def head_mine(request):
     if not request.session.get('is_login', None):
         return redirect('/login/')
-    return render(request, 'head_mine.html')
+    true_name = User.objects.get(user_name=request.session.get('username')).true_name
+    return render(request, 'head_mine.html', {'true_name': true_name})
 
 # def get_class(request):
 #     studentcourse = StudentCourse.objects.filter(user_name=request.session.get('username'))
@@ -460,18 +470,24 @@ def get_graduate_return(request):
 
 
 def change_info(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    if user_identity != 'applicant':
+        return render(request, 'forbidden.html')
     if not request.session.get('is_login', None):
         return redirect('/login/')
-    username = request.POST.get('username')
-    applicant = Applicant.objects.filter(user_name=username)
-    user = User.objects.filter(user_name=username)
+    username = request.session.get('username')
+    applicant = Applicant.objects.get(user_name=username)
+    user = User.objects.get(user_name=username)
     return render(request, 'change_info.html', {'applicant': applicant, 'user': user})
 
 
-def applicant_test(request):
-    if not request.session.get('is_login', None):
-        return redirect('/login/')
-    return render(request, 'applicant_test.html')
+# def applicant_test(request):
+#     user_identity = User.objects.get(user_name=request.session.get('username')).identity
+#     if user_identity != 'applicant':
+#         return render(request, 'forbidden.html')
+#     if not request.session.get('is_login', None):
+#         return redirect('/login/')
+#     return render(request, 'applicant_test.html')
 
 
 def save_applicant_data(request):
@@ -493,7 +509,22 @@ def save_applicant_data(request):
 
 # 考试信息表
 def applicant_test(request):
+    user_identity = User.objects.get(user_name=request.session.get('username')).identity
+    if user_identity != 'applicant':
+        return render(request,'forbidden.html')
     test_number = Applicant.objects.get(user_name=request.session.get('username')).test_number
     print(test_number)
     project1 = Applicant_test.objects.filter(test_number=test_number)
     return render(request, 'applicant_test.html', {'project1': project1})
+
+def change_student_data(request):
+    username = request.session.get('username')
+    type = request.POST.get('type')
+    if type=='name':
+        name = request.POST.get('true_name')
+        StudentBasic.objects.filter(user_name=username).update(name=name)
+        User.objects.filter(user_name=username).update(true_name=name)
+    if type=='tel':
+        tel = request.POST.get('tel')
+        StudentBasic.objects.filter(user_name=username).update(tel=tel)
+    return JsonResponse({'code': 200, 'msg': '保存成功！'})

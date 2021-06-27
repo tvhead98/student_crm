@@ -30,6 +30,7 @@ urlpatterns = [
     path('life/', views.life, name='life'),
     path('get_student_basic/', views.get_student_basic, name='get_student_basic'),
     path('p1/', views.p1, name='p1'),
+    path('change_info_student/', views.change_info_student, name='change_info_student'),
 
     path('graduate_edu/', views.graduate_edu, name='graduate_edu'),
     path('save_graduate_edu/', views.save_graduate_edu, name='save_graduate_edu'),
@@ -47,6 +48,7 @@ urlpatterns = [
     path('applicant_test/', views.applicant_test, name='applicant_test'),
     path('save_applicant_data/', views.save_applicant_data, name='save_applicant_data'),
     path('change_info/', views.change_info, name='change_info'),
+    path('change_student_data/', views.change_student_data, name='change_student_data'),
 
     # path('graduate_left/', views.graduate_left, name='graduate_left'),
 

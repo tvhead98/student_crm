@@ -43,11 +43,11 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
 <table cellpadding="0" cellspacing="0">
 <tr>
 <th width="100">姓名 <span class="f_cB">*</span></th>
-<td><div class="txtbox floatL" style="width:100px;"><input id="true_name" type="text" size="5" value={{ user.true_name }}></div></td>
+<td><div class="txtbox floatL" style="width:100px;"><input id="true_name" type="text" size="20" value={{ user.true_name }}></div></td>
 </tr>
 <tr>
 <th width="100">身份证号 <span class="f_cB">*</span></th>
-<td><div class="txtbox floatL" style="width:100px;"><input id="id_number" type="text" size="22" value={{ user.id_number }}></div></td>
+<td><div class="txtbox floatL" style="width:100px;"><input id="id_number" type="text" size="20" value={{ user.id_number }}></div></td>
 </tr>
 {#<tr>#}
 {#<form action="age">#}
@@ -59,30 +59,33 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
 <th>性别 <span class="f_cB">*</span></th>
 <td><!-- selectbox -->
     <select id="gender">
+        <option value={{ applicant.gender }} disabled selected hidden></option>
         <option value="0" >女</option>
         <option value="1" >男</option>
     </select>
 <!-- /selectbox -->
+    <td></td>
 </td>
 </tr>
 <tr>
 <th>生源地 <span class="f_cB">*</span></th>
-<td><div class="txtbox floatL" style="width:100px;"><input id="region" type="text" size="5" value={{ applicant.region }}></div></td>
+<td><div class="txtbox floatL" style="width:100px;"><input id="region" type="text" size="20" value={{ applicant.region }}></div></td>
 </tr>
 <tr>
 <th>毕业院校 <span class="f_cB">*</span></th>
-<td><div class="txtbox floatL" style="width:100px;"><input id="graduation_school" type="text" size="5" value={{ applicant.graduation_school }}></div></td>
+<td><div class="txtbox floatL" style="width:100px;"><input id="graduation_school" type="text" size="20" value={{ applicant.graduation_school }}></div></td>
 </tr>
 <tr>
 <th>目标专业 <span class="f_cB">*</span></th>
 <td><!-- selectbox -->
-    <select id="major" selected={{ applicant.major }}>
+    <select id="major">
+        <option value={{ applicant.major }} disabled selected hidden></option>
         <option value="管理科学与工程系">管理科学与工程系</option>
         <option value="会计系">会计系</option>
         <option value="财务管理系">财务管理系</option>
-        <option value="财务管理系">市场营销系</option>
-        <option value="财务管理系">企业管理系</option>
-        <option value="财务管理系">酒店管理系</option>
+        <option value="市场营销系">市场营销系</option>
+        <option value="企业管理系">企业管理系</option>
+        <option value="酒店管理系">酒店管理系</option>
     </select>
 <!-- /selectbox --></td>
 </tr>
@@ -94,7 +97,7 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
 </tr>
     <tr>
 <th>备注</th>
-<td><div class="txtbox"><textarea name="" cols="25" rows="5" id="remarks" maxlength="1000" value={{ applicant.remarks }}></textarea></div><p class="f_cB pdg_t5">最多500字</p></td>
+<td><div class="txtbox"><textarea name="" cols="25" rows="5" id="remarks" maxlength="1000" placeholder={{ applicant.remarks }}></textarea></div><p class="f_cB pdg_t5">最多500字</p></td>
 </tr>
 </table>
 </div>
@@ -120,7 +123,7 @@ $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hi
         id_number = $('#id_number').val();
         transfer = $("input:checkbox:checked").val();
         if(transfer!=1){
-            transfer=0;
+            transfer='0';
         }
         remarks = $('#remarks').val();
         //发送ajax
